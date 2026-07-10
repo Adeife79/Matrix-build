@@ -18,6 +18,7 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+
             - name: Set up Node.js ${{ matrix.node-version}}
               uses: actions/setup-node@v4
               with:
@@ -27,4 +28,23 @@ jobs:
             - run: npm ci
             - run: npm test
 
+            - name: Install Docker
+              if: matrix.os == 'ubuntu-latest'
+              run: |
+                    sudo apt-get update
+                    sudo apt-get install -y docker.io  
+                
+            - name: Install Docker (macos)
+              if: matrix.os == 'macos-latest'
+              run: |
+                    brew install docker
+
+            - name: Install Docker (windows)
+              if: matrix.os == 'windows-latest'
+              run: |
+                    choco install docker-cli
+
+            - name: Verify Docker Installation
+              run: docker --version
+              
           
